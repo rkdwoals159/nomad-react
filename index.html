@@ -8,21 +8,112 @@
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
-    const root = document.getElementById("root");
-
-    const App = () => {
-      const [counter, setCounter] = React.useState(0);
-      const onClick = () => {
-        setCounter(counter + 1);
+    const MinutesToHours = () => {
+      const [minutes, setMinutes] = React.useState(0);
+      const [inverted, setinverted] = React.useState(false);
+      const onChange = (event) => {
+        setMinutes(event.target.value);
+      };
+      const reset = () => {
+        setMinutes(0);
+      };
+      const onInvert = () => {
+        reset();
+        setinverted((current) => !current);
       };
       return (
         <div>
-          <h3>Total clicks: {counter}</h3>
-          <button onClick={onClick}>Click me!</button>
+          <div>
+            <label htmlFor="minutes">Minutes</label>
+            <input
+              value={inverted ? minutes * 60 : minutes} // 초창기 value값 + minutes바뀔때마다 setMinutes로 자동 렌더링됨
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={inverted}
+            />
+          </div>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              value={inverted ? minutes : Math.floor(minutes / 60)}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              disabled={!inverted}
+              onChange={onChange}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>
+            {inverted ? "Turn back" : " Invert"}
+          </button>
         </div>
       );
     };
-
+    const KmToMiles = () => {
+      const [kilos, setKilos] = React.useState(0);
+      const [inverted, setinverted] = React.useState(false);
+      const onChange = (event) => {
+        setKilos(event.target.value);
+      };
+      const reset = () => {
+        setKilos(0);
+      };
+      const onInvert = () => {
+        reset();
+        setinverted((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label htmlFor="kilos">kilos</label>
+            <input
+              value={inverted ? Math.floor(kilos / 0.621371) : kilos} // 초창기 value값 + minutes바뀔때마다 setMinutes로 자동 렌더링됨
+              id="kilos"
+              placeholder="kilos"
+              type="number"
+              onChange={onChange}
+              disabled={inverted}
+            />
+          </div>
+          <div>
+            <label htmlFor="miles">Miles</label>
+            <input
+              value={inverted ? kilos : Math.floor(kilos * 0.621371)}
+              id="miles"
+              placeholder="Miles"
+              type="number"
+              disabled={!inverted}
+              onChange={onChange}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>
+            {inverted ? "Turn back" : " Invert"}
+          </button>
+        </div>
+      );
+    };
+    const App = () => {
+      const [index, setIndex] = React.useState("0");
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "0" ? <MinutesToHours /> : <KmToMiles />}
+        </div>
+      );
+    };
+    const root = document.getElementById("root");
     ReactDOM.render(<App />, root);
   </script>
 </html>
